@@ -92,6 +92,14 @@ AddEventHandler('fantasy_spells:server:CheckVampire', function()
     TriggerClientEvent('fantasy_spells:client:VampireCheckResult', source, isVampire)
 end)
 
+RegisterServerEvent('fantasy_spells:server:CheckWerewolf')
+AddEventHandler('fantasy_spells:server:CheckWerewolf', function()
+    local source = source
+    local data = GetPlayerData(source)
+    local isWerewolf = data and data.is_werewolf == 1
+    TriggerClientEvent('fantasy_spells:client:WerewolfCheckResult', source, isWerewolf)
+end)
+
 RegisterServerEvent('fantasy_spells:server:GetVampireSpells')
 AddEventHandler('fantasy_spells:server:GetVampireSpells', function()
     local source = source
@@ -111,18 +119,37 @@ AddEventHandler('fantasy_spells:server:GetAnimagusSpells', function()
     TriggerClientEvent('fantasy_spells:client:AnimagusSpellsResult', source, Config.AnimagusSpells or {})
 end)
 
+RegisterServerEvent('fantasy_spells:server:GetLycanSpells')
+AddEventHandler('fantasy_spells:server:GetLycanSpells', function()
+    local source = source
+    TriggerClientEvent('fantasy_spells:client:LycanSpellsResult', source, Config.LycanSpells or {})
+end)
+
 -- Unlock events as fallback for failed exports
 RegisterServerEvent('fantasy_spells:server:UnlockVampire')
 AddEventHandler('fantasy_spells:server:UnlockVampire', function()
     local source = source
     print('[fantasy_spells] UnlockVampire event called for source:', source)
     local data = GetPlayerData(source)
-    if data.is_vampire == 1 then 
+    if data.is_vampire == 1 then
         print('[fantasy_spells] Player is already vampire')
-        return 
+        return
     end
     UpdatePlayerData(data.citizenid, 'is_vampire', 1)
     print('[fantasy_spells] Vampire status updated for:', data.citizenid)
+end)
+
+RegisterServerEvent('fantasy_spells:server:UnlockWerewolf')
+AddEventHandler('fantasy_spells:server:UnlockWerewolf', function()
+    local source = source
+    print('[fantasy_spells] UnlockWerewolf event called for source:', source)
+    local data = GetPlayerData(source)
+    if data.is_werewolf == 1 then
+        print('[fantasy_spells] Player is already werewolf')
+        return
+    end
+    UpdatePlayerData(data.citizenid, 'is_werewolf', 1)
+    print('[fantasy_spells] Werewolf status updated for:', data.citizenid)
 end)
 
 -- Razze
@@ -184,6 +211,10 @@ end)
 
 exports('GetAnimagusSpells', function()
     return Config.AnimagusSpells or {}
+end)
+
+exports('GetLycanSpells', function()
+    return Config.LycanSpells or {}
 end)
 
 -- Debug exports for testing

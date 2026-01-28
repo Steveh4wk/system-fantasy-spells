@@ -14,7 +14,8 @@ local originalPlayerState = {
 -- Stati delle creature
 local creatureStates = {
     isVampire = false,
-    isDemogorgon = false
+    isDemogorgon = false,
+    isIceWolf = false
 }
 
 -- ==============================
@@ -119,6 +120,7 @@ local function RestoreOriginalState()
         -- Resetta tutti gli stati delle creature
         creatureStates.isVampire = false
         creatureStates.isDemogorgon = false
+        creatureStates.isIceWolf = false
         
         print('[DEBUG] Original player state restored')
         return true
@@ -179,6 +181,39 @@ local vampireSpells = {
 }
 
 -- ==============================
+-- LISTA SPELL LYCAN
+-- ==============================
+local lycanSpells = {
+    howl = {
+        label = "Ululato",
+        cooldown = 60,                    -- in secondi
+        action = function()
+            -- Effetto ululato: aumenta velocità temporaneamente
+            SetRunSprintMultiplierForPlayer(PlayerId(), 1.5)
+            SetMeleeWeaponDamageModifier(1.5)
+            if lib and lib.notify then
+                lib.notify({title = 'Lycan', description = 'Ululato attivato! Velocità aumentata!'})
+            else
+                TriggerEvent('chat:addMessage', {
+                    color = {100, 255, 100},
+                    multiline = true,
+                    args = {"Lycan", "Ululato attivato! Velocità aumentata!"}
+                })
+            end
+            -- Resetta dopo 30 secondi
+            CreateThread(function()
+                Wait(30000)
+                SetRunSprintMultiplierForPlayer(PlayerId(), 1.0)
+                SetMeleeWeaponDamageModifier(1.0)
+                if lib and lib.notify then
+                    lib.notify({title = 'Lycan', description = 'Effetto ululato terminato'})
+                end
+            end)
+        end
+    }
+}
+
+-- ==============================
 -- FUNZIONI COOLDOWN
 -- ==============================
 local function IsOnCooldown(spellId)
@@ -194,6 +229,13 @@ end
 -- ==============================
 local function isVampire()
     return exports['fantasy_peds']:GetCreatureState('isVampire')
+end
+
+-- ==============================
+-- GETTER STATO LYCAN
+-- ==============================
+local function isLycan()
+    return exports['fantasy_peds']:GetCreatureState('isIceWolf')
 end
 
 -- ==============================
@@ -315,15 +357,110 @@ RegisterCommand('creatures', function()
 
             -- Applica effetti visivi per sembrare un Demogorgon
             local playerPed = PlayerPedId()
-            
+
             -- Rendi più scuro ma visibile
             SetEntityAlpha(playerPed, 220, false)
-            
+
             -- Effetto visivo di trasformazione
             StartScreenEffect("DeathFailOut", 2000, false)
-            
+
             exports['fantasy_peds']:SetCreatureState('isDemogorgon', true)
             lib.notify({title = 'Fantasy Peds', description = 'Sei diventato un Demogorgon! 👹'})
+        end
+    }
+
+    -- Opzione Ice Wolf
+    options[#options+1] = {
+        title = '🐺 Diventa Ice Wolf',
+        description = 'Trasformati in un lupo di ghiaccio leggendario',
+        onSelect = function()
+            -- Chiama direttamente la logica del comando become_ice_wolf
+            local playerId = PlayerId()
+
+            -- Prova prima con export diretto per lycan/werewolf
+            local success, hasWerewolf = pcall(function()
+                return exports['fantasy_spells']:HasWerewolf(playerId)
+            end)
+
+            -- Se l'export fallisce, usa evento come fallback
+            if not success then
+                TriggerServerEvent('fantasy_spells:server:CheckWerewolf')
+
+                local eventHandler = nil
+                eventHandler = AddEventHandler('fantasy_spells:client:WerewolfCheckResult', function(isWerewolf)
+                    if eventHandler then
+                        RemoveEventHandler(eventHandler)
+                    end
+
+                    if not isWerewolf then
+                        local success2, result = pcall(function()
+                            return exports['fantasy_spells']:UnlockWerewolf(playerId)
+                        end)
+                        if not success2 then
+                            print('[ERROR] UnlockWerewolf export failed, using event fallback')
+                            TriggerServerEvent('fantasy_spells:server:UnlockWerewolf')
+                        end
+                    end
+
+                    local model = 'Ice Wolf'
+                    local hash = joaat(model)
+
+                    RequestModel(hash)
+                    while not HasModelLoaded(hash) do
+                        Wait(10)
+                    end
+
+                    SetPlayerModel(playerId, hash)
+                    SetModelAsNoLongerNeeded(hash)
+
+                    -- Effetti visivi per Ice Wolf
+                    local playerPed = PlayerPedId()
+
+                    -- Effetto visivo di trasformazione con gelo
+                    StartScreenEffect("DeathFailOut", 2000, false)
+
+                    -- Aumenta leggermente la velocità base
+                    SetRunSprintMultiplierForPlayer(playerId, 1.2)
+
+                    exports['fantasy_peds']:SetCreatureState('isIceWolf', true)
+                    lib.notify({title = 'Fantasy Peds', description = 'Sei diventato un Ice Wolf! 🐺'})
+                end)
+                return
+            end
+
+            -- Se l'export funziona, procedi normalmente
+            if not hasWerewolf then
+                local success2, result = pcall(function()
+                    return exports['fantasy_spells']:UnlockWerewolf(playerId)
+                end)
+                if not success2 then
+                    print('[ERROR] UnlockWerewolf export failed, using event fallback')
+                    TriggerServerEvent('fantasy_spells:server:UnlockWerewolf')
+                end
+            end
+
+            local model = 'Ice Wolf'
+            local hash = joaat(model)
+
+            RequestModel(hash)
+            while not HasModelLoaded(hash) do
+                Wait(10)
+            end
+
+            SetPlayerModel(playerId, hash)
+            SetModelAsNoLongerNeeded(hash)
+
+            -- Effetti visivi per Ice Wolf
+            local playerPed = PlayerPedId()
+
+            -- Effetto visivo di trasformazione con gelo
+            StartScreenEffect("DeathFailOut", 2000, false)
+
+            -- Aumenta leggermente la velocità base
+            SetRunSprintMultiplierForPlayer(playerId, 1.2)
+
+            exports['fantasy_peds']:SetCreatureState('isIceWolf', true)
+            lib.notify({title = 'Fantasy Peds', description = 'Sei diventato un Ice Wolf! 🐺'})
         end
     }
 
@@ -371,6 +508,55 @@ RegisterCommand('creatures', function()
                         color = {255, 100, 255},
                         multiline = true,
                         args = {"Vampiro", "Menu spell non disponibile - usa /vampire_spells"}
+                    })
+                end
+            end
+        }
+    end
+
+    -- Opzione Spell Lycan (solo se lycan)
+    if isLycan() then
+        options[#options+1] = {
+            title = '📖 Libro delle Bestie',
+            description = 'Accedi alle abilità lycan',
+            onSelect = function()
+                local options = {}
+
+                for spellId, spell in pairs(lycanSpells) do
+                    options[#options+1] = {
+                        title = spell.label,
+                        onSelect = function()
+                            if not IsOnCooldown(spellId) then
+                                spell.action()
+                                StartCooldown(spellId, spell.cooldown)
+                            else
+                                if lib and lib.notify then
+                                    lib.notify({title='Lycan', description='Abilità in cooldown!', type='error'})
+                                else
+                                    TriggerEvent('chat:addMessage', {
+                                        color = {255, 0, 0},
+                                        multiline = true,
+                                        args = {"Lycan", "Abilità in cooldown!"}
+                                    })
+                                end
+                            end
+                        end
+                    }
+                end
+
+                if lib and lib.registerContext then
+                    lib.registerContext({
+                        id = 'lycan_spell_menu',
+                        title = 'Libro delle Bestie',
+                        options = options
+                    })
+                    lib.showContext('lycan_spell_menu')
+                else
+                    -- Fallback se ox_lib non disponibile
+                    TriggerEvent('chat:addMessage', {
+                        color = {100, 255, 100},
+                        multiline = true,
+                        args = {"Lycan", "Menu abilità non disponibile"}
                     })
                 end
             end
@@ -530,8 +716,12 @@ RegisterCommand('vampire_spells', function()
 end)
 
 -- ==============================
--- ESPORT STATO VAMPIRO
+-- ESPORT STATI
 -- ==============================
 exports('IsVampire', function()
     return exports['fantasy_peds']:GetCreatureState('isVampire')
+end)
+
+exports('IsLycan', function()
+    return exports['fantasy_peds']:GetCreatureState('isIceWolf')
 end)

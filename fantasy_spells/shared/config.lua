@@ -120,7 +120,7 @@ Config.AnimagusSpells = {
         action = function()
             SetAudioFlag('PlayerSprintAudio', true)
             lib.notify({title='Animagus', description='Sensi Animali attivati!', type='success'})
-            
+
             -- Disattiva dopo 20 secondi
             SetTimeout(20000, function()
                 SetAudioFlag('PlayerSprintAudio', false)
@@ -128,7 +128,7 @@ Config.AnimagusSpells = {
             end)
         end
     },
-    
+
     animal_speed = {
         id = 'animal_speed',
         label = 'Velocità Animale',
@@ -137,12 +137,52 @@ Config.AnimagusSpells = {
         action = function()
             SetRunSprintMultiplierForPlayer(PlayerId(), 1.3)
             lib.notify({title='Animagus', description='Velocità Animale attivata!', type='success'})
-            
+
             -- Ripristina dopo 20 secondi
             SetTimeout(20000, function()
                 SetRunSprintMultiplierForPlayer(PlayerId(), 1.0)
                 lib.notify({title='Animagus', description='Velocità Animale terminata', type='info'})
             end)
+        end
+    }
+}
+
+-- Spell Lycan
+Config.LycanSpells = {
+    ice_howl = {
+        id = 'ice_howl',
+        label = 'Ululato di Ghiaccio',
+        cooldown = 60,
+        description = 'Ululato che aumenta velocità e forza per 30 secondi',
+        action = function()
+            SetRunSprintMultiplierForPlayer(PlayerId(), 1.5)
+            SetMeleeWeaponDamageModifier(1.5)
+            lib.notify({title='Lycan', description='Ululato di Ghiaccio attivato!', type='success'})
+
+            -- Ripristina dopo 30 secondi
+            SetTimeout(30000, function()
+                SetRunSprintMultiplierForPlayer(PlayerId(), 1.2) -- Torna alla velocità base lycan
+                SetMeleeWeaponDamageModifier(1.0)
+                lib.notify({title='Lycan', description='Ululato di Ghiaccio terminato', type='info'})
+            end)
+        end
+    },
+
+    frost_breath = {
+        id = 'frost_breath',
+        label = 'Soffio di Gelo',
+        cooldown = 45,
+        description = 'Soffio congelante che rallenta i nemici vicini',
+        action = function()
+            local ped = PlayerPedId()
+            local pos = GetEntityCoords(ped)
+            -- Effetto visivo e sonoro
+            UseParticleFxAssetNextCall('core')
+            StartParticleFxNonLoopedAtCoord('ent_sht_water', pos.x, pos.y, pos.z + 1.0, 0.0, 0.0, 0.0, 1.0, false, false, false)
+            lib.notify({title='Lycan', description='Soffio di Gelo attivato!', type='success'})
+
+            -- Effetto area (simulato)
+            -- In un'implementazione completa, applicare slow ai ped vicini
         end
     }
 }
