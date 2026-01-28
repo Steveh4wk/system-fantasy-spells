@@ -335,7 +335,8 @@ RegisterCommand('creatures', function()
         end
     }
 
-    -- Opzione Demogorgon
+    -- Opzione Demogorgon (temporaneamente disabilitata per crash)
+    --[[
     options[#options+1] = {
         title = '👹 Diventa Demogorgon',
         description = 'Trasformati nel mostro dell\'Upside Down',
@@ -368,6 +369,7 @@ RegisterCommand('creatures', function()
             lib.notify({title = 'Fantasy Peds', description = 'Sei diventato un Demogorgon! 👹'})
         end
     }
+    ]]
 
     -- Opzione Ice Wolf
     options[#options+1] = {
