@@ -37,7 +37,7 @@
             <SuperlodType>SLOD_HUMAN</SuperlodType>
             <ScenarioPopStreamingSlot>SCENARIO_POP_STREAMING_NORMAL</ScenarioPopStreamingSlot>
             <DefaultSpawningPreference>DSP_NORMAL</DefaultSpawningPreference>
-            <IsStreamedGfx value="false" />
+            <IsStreamedGfx value="true" />
         </Item>
     </InitDatas>
 </CPedModelInfo__InitDataList>
