@@ -343,8 +343,8 @@ RegisterCommand('creatures', function()
             -- Chiama direttamente la logica del comando become_demogorgon
             local playerId = PlayerId()
 
-            -- Usa il modello Demogorgon reale (copia del Vampire)
-            local model = 'Demogorgon'
+            -- Usa il modello Vampire per evitare crash (Demogorgon potrebbe essere corrotto)
+            local model = 'Vampire'
             local hash = joaat(model)
 
             RequestModel(hash)

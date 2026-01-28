@@ -25,64 +25,114 @@ RegisterCommand('spells', function()
 
     -- Controlla se è Vampiro usando eventi
     TriggerServerEvent('fantasy_spells:server:CheckVampire')
-    
+
     local vampireHandler = AddEventHandler('fantasy_spells:client:VampireCheckResult', function(isVampire)
         RemoveEventHandler(vampireHandler)
-        
+
         if isVampire then
             TriggerServerEvent('fantasy_spells:server:GetVampireSpells')
-            
+
             local spellHandler = AddEventHandler('fantasy_spells:client:VampireSpellsResult', function(vampireSpells)
                 RemoveEventHandler(spellHandler)
-                
+
                 for spellId, spell in pairs(vampireSpells) do
                     options[#options+1] = CreateSpellOption(spellId, spell)
                 end
 
-                -- Controlla Animagus
-                TriggerServerEvent('fantasy_spells:server:GetAnimagusAnimal')
-                
-                local animagusHandler = AddEventHandler('fantasy_spells:client:AnimagusAnimalResult', function(animagusAnimal)
-                    RemoveEventHandler(animagusHandler)
-                    
-                    if animagusAnimal then
-                        TriggerServerEvent('fantasy_spells:server:GetAnimagusSpells')
-                        
-                        local animagusSpellHandler = AddEventHandler('fantasy_spells:client:AnimagusSpellsResult', function(animagusSpells)
-                            RemoveEventHandler(animagusSpellHandler)
-                            
-                            for spellId, spell in pairs(animagusSpells) do
+                -- Controlla Lycan
+                TriggerServerEvent('fantasy_spells:server:CheckWerewolf')
+
+                local lycanHandler = AddEventHandler('fantasy_spells:client:WerewolfCheckResult', function(isWerewolf)
+                    RemoveEventHandler(lycanHandler)
+
+                    if isWerewolf then
+                        TriggerServerEvent('fantasy_spells:server:GetLycanSpells')
+
+                        local lycanSpellHandler = AddEventHandler('fantasy_spells:client:LycanSpellsResult', function(lycanSpells)
+                            RemoveEventHandler(lycanSpellHandler)
+
+                            for spellId, spell in pairs(lycanSpells) do
                                 options[#options+1] = CreateSpellOption(spellId, spell)
                             end
 
-                            showMenu()
+                            checkAnimagus()
                         end)
                     else
-                        showMenu()
+                        checkAnimagus()
+                    end
+
+                    function checkAnimagus()
+                        -- Controlla Animagus
+                        TriggerServerEvent('fantasy_spells:server:GetAnimagusAnimal')
+
+                        local animagusHandler = AddEventHandler('fantasy_spells:client:AnimagusAnimalResult', function(animagusAnimal)
+                            RemoveEventHandler(animagusHandler)
+
+                            if animagusAnimal then
+                                TriggerServerEvent('fantasy_spells:server:GetAnimagusSpells')
+
+                                local animagusSpellHandler = AddEventHandler('fantasy_spells:client:AnimagusSpellsResult', function(animagusSpells)
+                                    RemoveEventHandler(animagusSpellHandler)
+
+                                    for spellId, spell in pairs(animagusSpells) do
+                                        options[#options+1] = CreateSpellOption(spellId, spell)
+                                    end
+
+                                    showMenu()
+                                end)
+                            else
+                                showMenu()
+                            end
+                        end)
                     end
                 end)
             end)
         else
-            -- Controlla solo Animagus se non è vampiro
-            TriggerServerEvent('fantasy_spells:server:GetAnimagusAnimal')
-            
-            local animagusHandler = AddEventHandler('fantasy_spells:client:AnimagusAnimalResult', function(animagusAnimal)
-                RemoveEventHandler(animagusHandler)
-                
-                if animagusAnimal then
-                    TriggerServerEvent('fantasy_spells:server:GetAnimagusSpells')
-                    
-                    local animagusSpellHandler = AddEventHandler('fantasy_spells:client:AnimagusSpellsResult', function(animagusSpells)
-                        RemoveEventHandler(animagusSpellHandler)
-                        
-                        for spellId, spell in pairs(animagusSpells) do
+            -- Controlla Lycan se non è vampiro
+            TriggerServerEvent('fantasy_spells:server:CheckWerewolf')
+
+            local lycanHandler = AddEventHandler('fantasy_spells:client:WerewolfCheckResult', function(isWerewolf)
+                RemoveEventHandler(lycanHandler)
+
+                if isWerewolf then
+                    TriggerServerEvent('fantasy_spells:server:GetLycanSpells')
+
+                    local lycanSpellHandler = AddEventHandler('fantasy_spells:client:LycanSpellsResult', function(lycanSpells)
+                        RemoveEventHandler(lycanSpellHandler)
+
+                        for spellId, spell in pairs(lycanSpells) do
                             options[#options+1] = CreateSpellOption(spellId, spell)
                         end
 
-                        showMenu()
+                        checkAnimagus()
                     end)
                 else
-                    showMenu()
+                    checkAnimagus()
+                end
+
+                function checkAnimagus()
+                    -- Controlla solo Animagus
+                    TriggerServerEvent('fantasy_spells:server:GetAnimagusAnimal')
+
+                    local animagusHandler = AddEventHandler('fantasy_spells:client:AnimagusAnimalResult', function(animagusAnimal)
+                        RemoveEventHandler(animagusHandler)
+
+                        if animagusAnimal then
+                            TriggerServerEvent('fantasy_spells:server:GetAnimagusSpells')
+
+                            local animagusSpellHandler = AddEventHandler('fantasy_spells:client:AnimagusSpellsResult', function(animagusSpells)
+                                RemoveEventHandler(animagusSpellHandler)
+
+                                for spellId, spell in pairs(animagusSpells) do
+                                    options[#options+1] = CreateSpellOption(spellId, spell)
+                                end
+
+                                showMenu()
+                            end)
+                        else
+                            showMenu()
+                        end
+                    end)
                 end
             end)
         end
