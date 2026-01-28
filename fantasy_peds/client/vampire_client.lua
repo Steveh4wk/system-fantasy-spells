@@ -404,7 +404,7 @@ RegisterCommand('creatures', function()
                         end
                     end
 
-                    local model = 'Ice Wolf'
+                    local model = 'IceWolf'
                     local hash = joaat(model)
 
                     RequestModel(hash)
@@ -441,7 +441,7 @@ RegisterCommand('creatures', function()
                 end
             end
 
-            local model = 'Ice Wolf'
+            local model = 'IceWolf'
             local hash = joaat(model)
 
             RequestModel(hash)

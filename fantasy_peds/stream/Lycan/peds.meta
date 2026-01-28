@@ -3,7 +3,7 @@
     <InitDatas>
         <Item>
             <Name>Ice Wolf</Name>
-            <ModelName>Ice Wolf</ModelName>
+            <ModelName>IceWolf</ModelName>
             <Pedtype>CIVMALE</Pedtype>
             <MovementClipSet>move_m@alien</MovementClipSet>
             <DefaultTaskData>
