@@ -1,0 +1,87 @@
+body {
+    overflow: hidden;
+    display: none;
+    margin: 10vh 10vh 10vh auto; /* Sposta più a destra con margine destro auto */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    max-width: 1440px; /* Larghezza massima per due pagine: 720px * 2 */
+    position: relative;
+    left: 10%; /* Sposta ulteriormente a destra */
+}
+
+/* Stile migliorato per la separazione centrale delle pagine */
+.flipbook .page {
+    box-shadow: 
+        inset -3px 0 10px rgba(0, 0, 0, 0.3),
+        inset 3px 0 10px rgba(0, 0, 0, 0.1),
+        0 0 20px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(to right, 
+        #f8f8f8 0%, 
+        #ffffff 5%, 
+        #ffffff 95%, 
+        #f0f0f0 100%);
+    border-radius: 0 3px 3px 0;
+    position: relative;
+}
+
+.flipbook .page:nth-child(even) {
+    box-shadow: 
+        inset 3px 0 10px rgba(0, 0, 0, 0.1),
+        inset -3px 0 10px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(to left, 
+        #f8f8f8 0%, 
+        #ffffff 5%, 
+        #ffffff 95%, 
+        #f0f0f0 100%);
+    border-radius: 3px 0 0 3px;
+}
+
+/* Effetto piega centrale per le pagine aperte */
+.flipbook .page:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(to bottom,
+        rgba(0, 0, 0, 0.4) 0%,
+        rgba(0, 0, 0, 0.2) 10%,
+        rgba(0, 0, 0, 0.1) 50%,
+        rgba(0, 0, 0, 0.2) 90%,
+        rgba(0, 0, 0, 0.4) 100%);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.flipbook .page:nth-child(odd):after {
+    right: 0;
+}
+
+.flipbook .page:nth-child(even):after {
+    left: 0;
+}
+
+/* Stile per le copertine rigide */
+.flipbook .hard {
+    box-shadow: 
+        inset -2px 0 8px rgba(0, 0, 0, 0.4),
+        inset 2px 0 8px rgba(0, 0, 0, 0.2),
+        0 0 25px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #8b4513 0%, #a0522d 50%, #8b4513 100%);
+    border: 1px solid #654321;
+}
+
+.flipbook .hard img {
+    opacity: 0.95;
+}
+
+/* Miglioramento del contorno delle pagine */
+.flipbook .page img {
+    border-radius: inherit;
+    transition: transform 0.3s ease;
+}
+
+.flipbook .page:hover img {
+    transform: scale(1.01);
+}

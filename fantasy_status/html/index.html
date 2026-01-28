@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fantasy Status</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="status-container">
+        <div class="status-bar">
+            <span class="label">HP</span>
+            <div class="bar">
+                <div class="fill" id="hp-fill"></div>
+            </div>
+        </div>
+        <div class="status-bar">
+            <span class="label">Hunger</span>
+            <div class="bar">
+                <div class="fill" id="hunger-fill"></div>
+            </div>
+        </div>
+        <div class="status-bar">
+            <span class="label">Thirst</span>
+            <div class="bar">
+                <div class="fill" id="thirst-fill"></div>
+            </div>
+        </div>
+        <div class="status-bar">
+            <span class="label">Stress</span>
+            <div class="bar">
+                <div class="fill" id="stress-fill"></div>
+            </div>
+        </div>
+        <div class="transformations-section">
+            <button id="transformations-btn" class="transform-btn">
+                Trasformazioni
+            </button>
+        </div>
+    </div>
+    <audio id="starSound" preload="auto">
+        <source src="sound.mp3" type="audio/mpeg">
+    </audio>
+    <script src="script.js"></script>
+</body>
+</html>
