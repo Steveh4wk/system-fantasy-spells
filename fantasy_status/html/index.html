@@ -5,39 +5,125 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fantasy Status</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div id="status-container">
-        <div class="status-bar">
-            <span class="label">HP</span>
-            <div class="bar">
-                <div class="fill" id="hp-fill"></div>
+        <!-- Header con info player -->
+        <div class="status-header">
+            <div class="player-info">
+                <i class="fas fa-user"></i>
+                <span id="player-name">Player</span>
+                <div class="creature-badge" id="creature-badge" style="display: none;">
+                    <i class="fas fa-dragon"></i>
+                    <span id="creature-type">Human</span>
+                </div>
+            </div>
+            <div class="status-time" id="status-time">00:00</div>
+        </div>
+
+        <!-- Status Bars -->
+        <div class="status-grid">
+            <!-- HP -->
+            <div class="status-item">
+                <div class="status-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <div class="status-content">
+                    <div class="status-label">Health</div>
+                    <div class="status-bar">
+                        <div class="status-fill health-fill" id="hp-fill"></div>
+                    </div>
+                    <div class="status-value" id="hp-value">100%</div>
+                </div>
+            </div>
+
+            <!-- Armor -->
+            <div class="status-item">
+                <div class="status-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="status-content">
+                    <div class="status-label">Armor</div>
+                    <div class="status-bar">
+                        <div class="status-fill armor-fill" id="armor-fill"></div>
+                    </div>
+                    <div class="status-value" id="armor-value">0%</div>
+                </div>
+            </div>
+
+            <!-- Hunger (dinamico per creature) -->
+            <div class="status-item" id="hunger-item">
+                <div class="status-icon">
+                    <i class="fas fa-drumstick-bite" id="hunger-icon"></i>
+                </div>
+                <div class="status-content">
+                    <div class="status-label" id="hunger-label">Hunger</div>
+                    <div class="status-bar">
+                        <div class="status-fill hunger-fill" id="hunger-fill"></div>
+                    </div>
+                    <div class="status-value" id="hunger-value">100%</div>
+                </div>
+            </div>
+
+            <!-- Thirst (dinamico per creature) -->
+            <div class="status-item" id="thirst-item">
+                <div class="status-icon">
+                    <i class="fas fa-tint" id="thirst-icon"></i>
+                </div>
+                <div class="status-content">
+                    <div class="status-label" id="thirst-label">Thirst</div>
+                    <div class="status-bar">
+                        <div class="status-fill thirst-fill" id="thirst-fill"></div>
+                    </div>
+                    <div class="status-value" id="thirst-value">100%</div>
+                </div>
+            </div>
+
+            <!-- Stress -->
+            <div class="status-item">
+                <div class="status-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="status-content">
+                    <div class="status-label">Stress</div>
+                    <div class="status-bar">
+                        <div class="status-fill stress-fill" id="stress-fill"></div>
+                    </div>
+                    <div class="status-value" id="stress-value">0%</div>
+                </div>
+            </div>
+
+            <!-- Creature Status (solo per vampiri/licantropi) -->
+            <div class="status-item" id="creature-status" style="display: none;">
+                <div class="status-icon">
+                    <i class="fas fa-moon" id="creature-icon"></i>
+                </div>
+                <div class="status-content">
+                    <div class="status-label" id="creature-status-label">Creature Power</div>
+                    <div class="status-bar">
+                        <div class="status-fill creature-fill" id="creature-fill"></div>
+                    </div>
+                    <div class="status-value" id="creature-value">0%</div>
+                </div>
             </div>
         </div>
-        <div class="status-bar">
-            <span class="label">Hunger</span>
-            <div class="bar">
-                <div class="fill" id="hunger-fill"></div>
+
+        <!-- Footer con shortcuts -->
+        <div class="status-footer">
+            <div class="shortcuts">
+                <button class="shortcut-btn" id="creatures-btn" title="Menu Creature (C)">
+                    <i class="fas fa-dragon"></i>
+                    <span>Creature</span>
+                </button>
+                <button class="shortcut-btn" id="abilities-btn" title="Abilità Creature">
+                    <i class="fas fa-magic"></i>
+                    <span>Abilities</span>
+                </button>
             </div>
-        </div>
-        <div class="status-bar">
-            <span class="label">Thirst</span>
-            <div class="bar">
-                <div class="fill" id="thirst-fill"></div>
-            </div>
-        </div>
-        <div class="status-bar">
-            <span class="label">Stress</span>
-            <div class="bar">
-                <div class="fill" id="stress-fill"></div>
-            </div>
-        </div>
-        <div class="transformations-section">
-            <button id="transformations-btn" class="transform-btn">
-                Trasformazioni
-            </button>
         </div>
     </div>
+
     <audio id="starSound" preload="auto">
         <source src="sound.mp3" type="audio/mpeg">
     </audio>

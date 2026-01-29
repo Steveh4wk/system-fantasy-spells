@@ -72,7 +72,7 @@ local function CleanupTransformation()
     
     -- Resetta modificatori di gioco
     SetRunSprintMultiplierForPlayer(PlayerId(), 1.0)
-    SetMeleeWeaponDamageModifier(1.0)
+    SetPlayerMeleeWeaponDamageModifier(PlayerId(), 1.0)
     
     print('[DEBUG] Transformation cleanup completed')
 end

@@ -2,6 +2,22 @@
 -- Fantasy UI - Menu spell Vampiro e Animagus
 -- Usa solo exports di fantasy_spells
 
+-- Funzione helper per creare opzioni menu Lycan
+local function CreateLycanSpellOption(spellId, spell)
+    return {
+        title = '🐺 ' .. spell.label,
+        description = spell.description or 'Abilità Lycan',
+        onSelect = function()
+            if exports['fantasy_ui']:CanCastSpell(spellId) then
+                spell.action()  -- Azione della spell
+                exports['fantasy_ui']:StartCooldown(spellId, spell.cooldown)
+            else
+                lib.notify({title='Lycan', description='Abilità in cooldown!', type='error'})
+            end
+        end
+    }
+end
+
 -- Funzione helper per creare opzioni menu
 local function CreateSpellOption(spellId, spell)
     return {
@@ -52,7 +68,7 @@ RegisterCommand('spells', function()
                             RemoveEventHandler(lycanSpellHandler)
 
                             for spellId, spell in pairs(lycanSpells) do
-                                options[#options+1] = CreateSpellOption(spellId, spell)
+                                options[#options+1] = CreateLycanSpellOption(spellId, spell)
                             end
 
                             checkAnimagus()
@@ -101,7 +117,7 @@ RegisterCommand('spells', function()
                         RemoveEventHandler(lycanSpellHandler)
 
                         for spellId, spell in pairs(lycanSpells) do
-                            options[#options+1] = CreateSpellOption(spellId, spell)
+                            options[#options+1] = CreateLycanSpellOption(spellId, spell)
                         end
 
                         checkAnimagus()

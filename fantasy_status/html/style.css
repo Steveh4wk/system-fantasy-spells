@@ -1,72 +1,265 @@
+/* Fantasy Status UI - Elegant & Professional */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body.hidden {
     display: none;
 }
 
-/* Stile per il pulsante trasformazioni */
-.transformations-section {
-    margin-top: 20px;
-    text-align: center;
+body {
+    font-family: 'Inter', sans-serif;
+    background: transparent;
+    user-select: none;
+    pointer-events: none;
 }
 
-.transform-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 25px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-    margin: 10px 0;
-}
-
-.transform-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-}
-
-.transform-btn:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 10px rgba(102, 126, 234, 0.4);
-}
-
-/* Stile per le barre di stato */
 #status-container {
-    background: rgba(0, 0, 0, 0.8);
-    padding: 20px;
-    border-radius: 15px;
-    border: 2px solid rgba(102, 126, 234, 0.5);
-    min-width: 300px;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: transparent;
+    backdrop-filter: none;
+    border: none;
+    border-radius: 12px;
+    padding: 12px;
+    min-width: 280px;
+    max-width: 320px;
+    box-shadow: none;
+    pointer-events: auto;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.status-bar {
+#status-container:hover {
+    transform: translateY(-2px);
+    box-shadow: none;
+}
+
+/* Header */
+.status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.player-info {
     display: flex;
     align-items: center;
-    margin: 10px 0;
+    gap: 8px;
+    color: #f1f5f9;
+    font-weight: 500;
+    font-size: 12px;
 }
 
-.label {
-    color: #fff;
-    font-weight: bold;
-    width: 80px;
+.player-info i {
+    color: #64748b;
     font-size: 14px;
 }
 
-.bar {
-    flex: 1;
-    height: 20px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    overflow: hidden;
-    margin-left: 10px;
+.creature-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    animation: pulse-glow 2s infinite;
 }
 
-.fill {
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 15px rgba(168, 85, 247, 0.3); }
+    50% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.5); }
+}
+
+.status-time {
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Status Grid */
+.status-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    transition: all 0.2s ease;
+}
+
+.status-item:hover {
+    transform: translateX(1px);
+}
+
+.status-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(148, 163, 184, 0.1);
+    border-radius: 6px;
+    color: #64748b;
+    font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+.status-icon.vampire {
+    background: rgba(220, 38, 38, 0.2);
+    color: #dc2626;
+}
+
+.status-icon.lycan {
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+}
+
+.status-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.status-label {
+    color: #cbd5e1;
+    font-size: 9px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.status-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(148, 163, 184, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+}
+
+.status-fill {
     height: 100%;
-    background: linear-gradient(90deg, #667eea, #764ba2);
-    transition: width 0.3s ease;
-    border-radius: 10px;
+    border-radius: 2px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.status-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.health-fill {
+    background: linear-gradient(90deg, #dc2626, #ef4444);
+}
+
+.armor-fill {
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+}
+
+.hunger-fill {
+    background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+
+.hunger-fill.vampire {
+    background: linear-gradient(90deg, #dc2626, #ef4444);
+}
+
+.hunger-fill.lycan {
+    background: linear-gradient(90deg, #ea580c, #f97316);
+}
+
+.thirst-fill {
+    background: linear-gradient(90deg, #06b6d4, #22d3ee);
+}
+
+.thirst-fill.vampire {
+    background: linear-gradient(90deg, #7c3aed, #a855f7);
+}
+
+.thirst-fill.lycan {
+    background: linear-gradient(90deg, #0891b2, #06b6d4);
+}
+
+.stress-fill {
+    background: linear-gradient(90deg, #64748b, #94a3b8);
+}
+
+.creature-fill {
+    background: linear-gradient(90deg, #7c3aed, #a855f7);
+}
+
+.creature-fill.vampire {
+    background: linear-gradient(90deg, #dc2626, #ef4444);
+}
+
+.creature-fill.lycan {
+    background: linear-gradient(90deg, #ea580c, #f97316);
+}
+
+.status-value {
+    color: #f1f5f9;
+    font-size: 8px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+/* Low status warnings */
+.status-item.warning .status-fill {
+    animation: warning-pulse 1s infinite;
+}
+
+@keyframes warning-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+.status-item.danger .status-fill {
+    animation: danger-pulse 0.5s infinite;
+}
+
+@keyframes danger-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    #status-container {
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+        min-width: auto;
+        max-width: none;
+    }
 }
